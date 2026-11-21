@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "isud-sdk"
+name = "isud-tm"
 version = "1.0.0"
 description = "优标宝商标数据开放 API 的 Python SDK（商标排查/档案查询/外观设计的契约驱动客户端）"
 readme = "README.md"
@@ -35,11 +35,11 @@ dev = [
 [project.urls]
 Homepage = "https://docs.isud.cn/"
 Documentation = "https://docs.isud.cn/docs/quickstart"
-Repository = "https://gitee.com/isud/isud-sdk-python"
-Issues = "https://gitee.com/isud/isud-sdk-python/issues"
+Repository = "https://github.com/isud-opensource/isud-sdk-python"
+Issues = "https://github.com/isud-opensource/isud-sdk-python/issues"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/isud_sdk"]
+packages = ["src/isud_tm"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

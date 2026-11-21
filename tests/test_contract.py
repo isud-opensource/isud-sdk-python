@@ -8,8 +8,8 @@ from __future__ import annotations
 import httpx
 import pytest
 
-from isud_sdk import Client
-from isud_sdk import errors as E
+from isud_tm import Client
+from isud_tm import errors as E
 from conftest import Recorder, envelope, json_response
 
 
@@ -121,7 +121,7 @@ def test_retry_succeeds_after_transient_network_error(monkeypatch):
         return json_response(envelope({"ok": True}))
 
     rec.handler = handler
-    import isud_sdk.retry as retry_mod
+    import isud_tm.retry as retry_mod
 
     monkeypatch.setattr(retry_mod.time, "sleep", lambda s: None)
     with make_client(rec, max_retries=2) as c:

@@ -5,7 +5,7 @@
 演示点：key 从环境变量读、信封解析、扣点回读、友好异常。
 
 运行（3 步跑通）:
-    pip install isud-sdk
+    pip install isud-tm
     export ISUD_API_KEY="lgr_live_你的密钥"      # Windows: set ISUD_API_KEY=...
     python main.py 优标宝 CN
 """
@@ -15,8 +15,8 @@ from __future__ import annotations
 import os
 import sys
 
-from isud_sdk import Client, SdkError
-from isud_sdk.extras import format_search_result
+from isud_tm import Client, SdkError
+from isud_tm.extras import format_search_result
 
 
 def main() -> int:

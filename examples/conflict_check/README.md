@@ -5,7 +5,7 @@
 ## 运行
 
 ```bash
-pip install isud-sdk
+pip install isud-tm
 export ISUD_API_KEY="lgr_live_你的密钥"
 python main.py 优标宝 CN
 ```

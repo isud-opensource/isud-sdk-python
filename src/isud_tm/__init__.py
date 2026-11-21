@@ -3,7 +3,7 @@
 三步跑通::
 
     import os
-    from isud_sdk import Client
+    from isud_tm import Client
 
     client = Client(api_key=os.environ["ISUD_API_KEY"])
     result = client.search_trademarks(jurisdictionCode="CN", keyword="优标宝")

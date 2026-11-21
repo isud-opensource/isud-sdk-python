@@ -5,7 +5,7 @@
 演示点：幂等键、429 退避（SDK 自动）、用量查询、批量场景的节流友好提示。
 
 运行:
-    pip install isud-sdk
+    pip install isud-tm
     export ISUD_API_KEY="lgr_live_你的密钥"
     python main.py marks.csv results.csv CN
 """
@@ -16,8 +16,8 @@ import csv
 import os
 import sys
 
-from isud_sdk import Client, SdkError, RateLimitError
-from isud_sdk.extras import write_csv
+from isud_tm import Client, SdkError, RateLimitError
+from isud_tm.extras import write_csv
 
 # 检索类 30 次/分钟；批量场景放慢一点更稳妥（SDK 已有 429 退避兜底）
 BATCH_PAUSE = 2.0

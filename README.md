@@ -1,4 +1,8 @@
-# isud-sdk-python
+# isud-tm
+
+[![PyPI version](https://img.shields.io/pypi/v/isud-tm)](https://pypi.org/project/isud-tm/)
+[![Python](https://img.shields.io/pypi/pyversions/isud-tm)](https://pypi.org/project/isud-tm/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
 优标宝商标数据开放 API 的 Python SDK —— 商标排查、档案查询、外观设计的**契约驱动**客户端。
 
@@ -11,7 +15,7 @@
 ## 安装
 
 ```bash
-pip install isud-sdk
+pip install isud-tm
 ```
 
 ## 3 分钟上手
@@ -24,7 +28,7 @@ python hello.py
 `hello.py`：
 
 ```python
-from isud_sdk import Client
+from isud_tm import Client
 
 client = Client()  # 自动读取环境变量 ISUD_API_KEY
 result = client.search_trademarks(jurisdictionCode="CN", keyword="优标宝")
@@ -42,7 +46,7 @@ print("本次扣点:", client.last_meta.credits_charged)
 ## 核心能力
 
 ```python
-from isud_sdk import Client, RateLimitError
+from isud_tm import Client, RateLimitError
 
 client = Client(api_key="lgr_live_...")
 
@@ -100,14 +104,14 @@ except RateLimitError as e:
 
 ## 重新生成模型层
 
-数据模型由 OpenAPI 契约生成，**不要手改** `src/isud_sdk/models.py`：
+数据模型由 OpenAPI 契约生成，**不要手改** `src/isud_tm/models.py`：
 
 ```bash
 python -m datamodel_codegen \
   --input openapi.yaml --input-file-type openapi \
   --output-model-type dataclasses.dataclass \
   --target-python-version 3.11 \
-  --output src/isud_sdk/models.py
+  --output src/isud_tm/models.py
 ```
 
 ## 契约与文档
