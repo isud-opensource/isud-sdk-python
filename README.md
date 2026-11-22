@@ -83,6 +83,29 @@ except RateLimitError as e:
 | `get_usage()` | 点数余额与用量 |
 | `query_request_log(requestId)` | 按追踪 ID 回查调用结果 |
 | `get_mcp_health()` / `call_mcp()` | MCP 探活 / JSON-RPC 调用 |
+| `query_vienna(**filters)` | 图形检索：维也纳 VCL10 编码 / 关键词换码 / 分类树 / 以图搜图 |
+| `query_gazette(**filters)` | 商标公告：CN 公告明细与期号 / 全球 7 局事件 |
+| `query_review(**filters)` | 评审文书：CNIPA 298 万裁定书（分面统计 / 全文 / 按注册号关联） |
+| `query_ipr(**filters)` | 海关备案：12 万条备案记录（可选接入） |
+
+四个数据能力方法均为 GET、读类 1 点/次，返回 `data` 原始 JSON（结构随 `mode` 变化）：
+
+```python
+# 图形检索：先用关键词换编码，再按编码检索
+codes = client.query_vienna(mode="codes", q="王冠")
+marks = client.query_vienna(mode="search", codes="24.9.1", limit=20)
+
+# 商标公告：按期号查 CN 公告明细
+issues = client.query_gazette(mode="issues")
+rows = client.query_gazette(mode="rows", issue="2008", mark="华为", size=10)
+
+# 评审文书：查某商标的评审案例 + 法条分面
+docs = client.query_review(q="华为", size=10)
+facets = client.query_review(mode="meta")
+
+# 海关备案：按标称名称查备案
+filings = client.query_ipr(q="华为")
+```
 
 ## 示例项目
 

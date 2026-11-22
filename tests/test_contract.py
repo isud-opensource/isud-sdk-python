@@ -179,20 +179,42 @@ def test_iter_trademarks_auto_paging():
         assert len(rec.calls) == 2
 
 
-# ---------------------------------------------------------------- 9 端点覆盖
-def test_all_nine_endpoints_exist():
+# ---------------------------------------------------------------- 13 端点覆盖
+def test_all_endpoints_exist():
     methods = [
         "search_trademarks", "list_trademarks", "search_designs", "list_reports",
         "get_workbench_stats", "get_usage", "query_request_log",
         "get_mcp_health", "call_mcp",
+        "query_vienna", "query_gazette", "query_review", "query_ipr",
     ]
     for m in methods:
         assert callable(getattr(Client, m, None)), m
 
 
+def test_data_capability_endpoints():
+    """四个数据能力端点走 GET，参数透传，返回 data。"""
+    cases = [
+        ("query_vienna", {"mode": "codes", "q": "王冠"}, "/ip/vienna/query"),
+        ("query_gazette", {"mode": "issues"}, "/ip/gazette/query"),
+        ("query_review", {"q": "华为", "size": 1}, "/ip/review/query"),
+        ("query_ipr", {"mode": "stats"}, "/ip/ipr/query"),
+    ]
+    for name, kwargs, path in cases:
+        rec = Recorder()
+        rec.handler = lambda r: json_response(envelope({"ok": True, "rows": []}))
+        with make_client(rec) as c:
+            result = getattr(c, name)(**kwargs)
+        assert result == {"ok": True, "rows": []}
+        call = rec.calls[0]
+        assert call.method == "GET"
+        assert path in call.url
+        for k, v in kwargs.items():
+            assert f"{k}={v}" in call.url or f"{k}=" in call.url
+
+
 def test_mcp_uses_correct_base_url():
     rec = Recorder()
-    rec.handler = lambda r: json_response({"status": "ok", "toolCount": 13})
+    rec.handler = lambda r: json_response({"status": "ok", "toolCount": 15})
     with make_client(rec) as c:
         c.get_mcp_health()
         assert "/api/v1/open/mcp/health" in rec.calls[0].url

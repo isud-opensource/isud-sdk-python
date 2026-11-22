@@ -355,6 +355,46 @@ class Client:
             raise ValidationError("requestId 必须为 1~64 字符。")
         return self._request("GET", "/ip/requests", params={"requestId": requestId})
 
+    # ------------------------------------------------------------------ #
+    # 数据能力：图形检索 / 商标公告 / 评审文书 / 海关备案（GET，读类 1 点）
+    # ------------------------------------------------------------------ #
+    def query_vienna(self, **filters: Any) -> Any:
+        """图形检索（维也纳 VCL10 + 以图搜图）。
+
+        常用参数：mode=search|codes|tree|similar|meta|img；codes（逗号分隔编码）；
+        q（关键词换码）；parent（分类树父节点）；id（以图搜图种子ID）；maxdist；
+        office；cls；limit；offset。返回 data 为原始 JSON，结构随 mode 变化，
+        客户端应按传入的 mode 解析（如 mode=codes 返回 rows 编码表）。
+        """
+        return self._request("GET", "/ip/vienna/query", params=filters)
+
+    def query_gazette(self, **filters: Any) -> Any:
+        """商标公告（CN + 全球）。
+
+        常用参数：mode=rows|issues|global；submode=rows|stats（mode=global）；
+        issue/type/mark/q/appno/applicant/agent/office/dateFrom/dateTo/event/owner/cls/
+        limit/offset。返回 data 结构随 mode 变化。
+        """
+        return self._request("GET", "/ip/gazette/query", params=filters)
+
+    def query_review(self, **filters: Any) -> Any:
+        """评审文书（CNIPA 298 万）。
+
+        常用参数：mode=docs|meta；q（全文/案号/商标名）；type；law（法条key，来自 meta）；
+        year；regNo/appNo（按注册号/申请号关联）；full=1（返回全文）；page；size。
+        返回 data 结构随 mode 变化（docs 含 docs 列表，meta 含分面统计）。
+        """
+        return self._request("GET", "/ip/review/query", params=filters)
+
+    def query_ipr(self, **filters: Any) -> Any:
+        """海关备案（12 万）。
+
+        常用参数：mode=records|stats|icon；q（标称名称）；owner；type；cls；regno；
+        recno；dateFrom/dateTo；id（mode=icon）；page；size。
+        该库为可选接入，未配置数据源时服务端返回 0002 能力不可用。
+        """
+        return self._request("GET", "/ip/ipr/query", params=filters)
+
     def get_mcp_health(self) -> Any:
         """MCP 服务健康检查（无需鉴权，返回裸对象）。
 

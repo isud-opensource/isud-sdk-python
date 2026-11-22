@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "isud-tm"
-version = "1.0.2"
+version = "1.0.3"
 description = "优标宝商标数据开放 API 的 Python SDK（商标排查/档案查询/外观设计的契约驱动客户端）"
 readme = "README.md"
 requires-python = ">=3.9"
