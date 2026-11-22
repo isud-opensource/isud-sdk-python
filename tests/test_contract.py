@@ -195,5 +195,4 @@ def test_mcp_uses_correct_base_url():
     rec.handler = lambda r: json_response({"status": "ok", "toolCount": 13})
     with make_client(rec) as c:
         c.get_mcp_health()
-        assert "/api/v1/mcp/health" in rec.calls[0].url
-        assert "/api/v1/open" not in rec.calls[0].url
+        assert "/api/v1/open/mcp/health" in rec.calls[0].url

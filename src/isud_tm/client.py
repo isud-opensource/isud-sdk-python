@@ -14,6 +14,7 @@ from typing import Any
 import httpx
 
 from .errors import (
+    ApiError,
     NetworkError,
     RateLimitError,
     ResponseMeta,
@@ -171,7 +172,9 @@ class Client:
                 if response.status_code >= 400:
                     meta_bare = self._build_meta(response, {})
                     self.last_meta = meta_bare
-                    raise NetworkError(
+                    # 已拿到 HTTP 响应（服务端返回的 4xx/5xx）归 ApiError；
+                    # 真正的连接/超时失败在 _request 的 except 分支仍归 NetworkError。
+                    raise ApiError(
                         f"HTTP {response.status_code}: {str(payload)[:200]}",
                         meta=meta_bare, status_code=response.status_code,
                     )
@@ -353,8 +356,13 @@ class Client:
         return self._request("GET", "/ip/requests", params={"requestId": requestId})
 
     def get_mcp_health(self) -> Any:
-        """MCP 服务健康检查（无需鉴权，走 MCP base，返回裸对象）。"""
-        return self._request("GET", "/mcp/health", base_url=MCP_BASE_URL, retries=0, envelope=False)
+        """MCP 服务健康检查（无需鉴权，返回裸对象）。
+
+        注意：健康检查端点 /mcp/health 在 openapi 规范中未覆盖 servers，
+        继承全局 /api/v1/open；只有 MCP JSON-RPC 主端点 /mcp 挂在 /api/v1。
+        因此这里不传 base_url，走默认 DEFAULT_BASE_URL（/api/v1/open）。
+        """
+        return self._request("GET", "/mcp/health", retries=0, envelope=False)
 
     def call_mcp(self, method: str, params: dict[str, Any] | None = None, *, id: int = 1) -> Any:
         """MCP JSON-RPC 调用（scope: mcp）。默认不自动重试。"""
