@@ -64,7 +64,7 @@ class Client:
 
         headers = {
             "X-API-Key": key,
-            "User-Agent": "isud-sdk-python/1.0.0",
+            "User-Agent": "isud-sdk-python/1.0.2",
             "Accept": "application/json",
         }
         if transport is not None:
