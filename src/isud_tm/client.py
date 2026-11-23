@@ -233,6 +233,7 @@ class Client:
         saveReport: bool = False,
         reportTitle: str | None = None,
         intentMark: str | None = None,
+        intentClasses: list[str] | None = None,
         connectorCode: str | None = None,
         idempotency_key: str | None = None,
     ) -> Any:
@@ -252,6 +253,7 @@ class Client:
             saveReport=saveReport,
             reportTitle=reportTitle,
             intentMark=intentMark,
+            intentClasses=intentClasses,
             connectorCode=connectorCode,
         )
         body.update({k: v for k, v in optional.items() if v is not None})

@@ -218,3 +218,19 @@ def test_mcp_uses_correct_base_url():
     with make_client(rec) as c:
         c.get_mcp_health()
         assert "/api/v1/open/mcp/health" in rec.calls[0].url
+
+
+def test_search_trademarks_passes_intent_fields():
+    """search_trademarks 必须透传 intentMark 与 intentClasses（契约字段）。"""
+    rec = Recorder()
+    rec.handler = lambda r: json_response(envelope({"conclusion": "安全", "total": 0}))
+    with make_client(rec) as c:
+        c.search_trademarks(
+            jurisdictionCode="CN",
+            keyword="优标宝",
+            intentMark="竞品商标",
+            intentClasses=["25", "35"],
+        )
+    body = rec.calls[0].body
+    assert body["intentMark"] == "竞品商标"
+    assert body["intentClasses"] == ["25", "35"]

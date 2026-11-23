@@ -22,7 +22,7 @@ from .errors import (
     ValidationError,
 )
 
-__version__ = "1.0.3"
+__version__ = "1.0.4"
 
 __all__ = [
     "Client",
